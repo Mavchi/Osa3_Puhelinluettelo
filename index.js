@@ -70,6 +70,11 @@ app.post('/api/persons', (request,response) => {
             error: 'Number or name is missing'
         })
     }
+    if(persons.find(person => person.name === body.name)){
+        response.status(400).json({
+            error: 'Name must be unique'
+        })
+    }
 
     const person = {
         name: body.name,
