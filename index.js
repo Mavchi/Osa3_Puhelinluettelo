@@ -28,6 +28,12 @@ let persons =[
       }
 ]
 
+const generateId = () => {
+    min = 0;
+    max = 100000;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 app.get('/info', (request, response) => {
     response.send(
         `<p>Phonebook has info for ${persons.length}</p>
@@ -54,6 +60,24 @@ app.delete('/api/persons/:id', (request,response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
     response.status(202).end()
+})
+
+app.post('/api/persons', (request,response) => {
+    const body = request.body
+
+    if(!body.name || !body.number){
+        response.send(400).json({
+            error: 'Number or name is missing'
+        })
+    }
+
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: generateId()
+    }
+    persons = persons.concat(person)
+    response.json(person)
 })
 
 
